@@ -23,13 +23,14 @@ void Material::LoadShaders(ID3D11Device* &device, ID3D11DeviceContext * &context
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
 }
 
-Material::Material()
-{
-	vertexShader = 0;
-	pixelShader = 0;
+ Material::Material()
+ {
+	 vertexShader = 0;
+	 pixelShader = 0;
+
 }
 
-Material::~Material()
+ Material::~Material()
 {
 	delete vertexShader;
 	delete pixelShader;

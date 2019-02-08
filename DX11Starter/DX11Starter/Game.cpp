@@ -24,8 +24,8 @@ Game::Game(HINSTANCE hInstance)
 	// Initialize fields
 	vertexBuffer = 0;
 	indexBuffer = 0;
-	//vertexShader = 0;
-	//pixelShader = 0;
+	vertexShader = 0;
+	pixelShader = 0;
 	
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -71,7 +71,7 @@ void Game::Init()
 	// Helper methods for loading shaders, creating some basic
 	// geometry to draw and some simple camera matrices.
 	//  - You'll be expanding and/or replacing these later
-	mat.LoadShaders(device, context);
+	LoadShaders();
 	CreateMatrices();
 	CreateBasicGeometry();
 
@@ -87,14 +87,14 @@ void Game::Init()
 // - SimpleShader provides helpful methods for sending
 //   data to individual variables on the GPU
 // --------------------------------------------------------
-/*void Game::LoadShaders()
+void Game::LoadShaders()
 {
 	vertexShader = new SimpleVertexShader(device, context);
 	vertexShader->LoadShaderFile(L"VertexShader.cso");
 
 	pixelShader = new SimplePixelShader(device, context);
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
-}*/
+}
 
 
 
@@ -289,13 +289,13 @@ void Game::Draw(float deltaTime, float totalTime)
 	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(cam.Update()));
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(cam.Projection()));
 	//Draw Calls for Individual Objects
-	/*vertexShader->SetMatrix4x4("world", GameEntity1->GetWorldMatrix());
+	vertexShader->SetMatrix4x4("world", GameEntity1->GetWorldMatrix());
 	vertexShader->SetMatrix4x4("view", viewMatrix);
 	vertexShader->SetMatrix4x4("projection", projectionMatrix);
 	vertexShader->CopyAllBufferData();
 	vertexShader->SetShader();
-	pixelShader->SetShader();*/
-	GameEntity1->(viewMatrix, projectionMatrix, worldMatrix, *mat);
+	pixelShader->SetShader();
+	/*GameEntity1->PrepareMaterial(viewMatrix, projectionMatrix, worldMatrix, mat);*/
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
