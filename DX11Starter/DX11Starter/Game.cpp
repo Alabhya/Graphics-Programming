@@ -24,8 +24,8 @@ Game::Game(HINSTANCE hInstance)
 	// Initialize fields
 	vertexBuffer = 0;
 	indexBuffer = 0;
-	vertexShader = 0;
-	pixelShader = 0;
+	//vertexShader = 0;
+	//pixelShader = 0;
 	
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -71,7 +71,7 @@ void Game::Init()
 	// Helper methods for loading shaders, creating some basic
 	// geometry to draw and some simple camera matrices.
 	//  - You'll be expanding and/or replacing these later
-	LoadShaders();
+	mat.LoadShaders(device, context);
 	CreateMatrices();
 	CreateBasicGeometry();
 
@@ -87,14 +87,14 @@ void Game::Init()
 // - SimpleShader provides helpful methods for sending
 //   data to individual variables on the GPU
 // --------------------------------------------------------
-void Game::LoadShaders()
+/*void Game::LoadShaders()
 {
 	vertexShader = new SimpleVertexShader(device, context);
 	vertexShader->LoadShaderFile(L"VertexShader.cso");
 
 	pixelShader = new SimplePixelShader(device, context);
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
-}
+}*/
 
 
 
@@ -233,28 +233,28 @@ void Game::Update(float deltaTime, float totalTime)
 	// Quit if the escape key is pressed
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
-	if (GetAsyncKeyState('W'))
+	if (GetAsyncKeyState('W') & 0x8000)
 	{
 		cam.MoveForward(deltaTime);
 		cam.Update();
 	}
-	if (GetAsyncKeyState('S'))
+	if (GetAsyncKeyState('S') & 0x8000)
 	{
 		cam.MoveBackward(deltaTime);
 	}
-	if (GetAsyncKeyState('A'))
+	if (GetAsyncKeyState('A') & 0x8000)
 	{
 		cam.MoveLeft(deltaTime);
 	}
-	if (GetAsyncKeyState('D'))
+	if (GetAsyncKeyState('D') & 0x8000)
 	{
 		cam.MoveRight(deltaTime);
 	}
-	if (GetAsyncKeyState('Q'))
+	if (GetAsyncKeyState('Q') & 0x8000)
 	{
 		cam.MoveUp(deltaTime);
 	}
-	if (GetAsyncKeyState('E'))
+	if (GetAsyncKeyState('E') & 0x8000)
 	{
 		cam.MoveDown(deltaTime);
 	}
@@ -287,13 +287,15 @@ void Game::Draw(float deltaTime, float totalTime)
 		1.0f,
 		0);
 	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(cam.Update()));
+	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(cam.Projection()));
 	//Draw Calls for Individual Objects
-	vertexShader->SetMatrix4x4("world", GameEntity1->GetWorldMatrix());
+	/*vertexShader->SetMatrix4x4("world", GameEntity1->GetWorldMatrix());
 	vertexShader->SetMatrix4x4("view", viewMatrix);
 	vertexShader->SetMatrix4x4("projection", projectionMatrix);
 	vertexShader->CopyAllBufferData();
 	vertexShader->SetShader();
-	pixelShader->SetShader();
+	pixelShader->SetShader();*/
+	GameEntity1->(viewMatrix, projectionMatrix, worldMatrix, *mat);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
@@ -441,6 +443,26 @@ void Game::OnMouseUp(WPARAM buttonState, int x, int y)
 void Game::OnMouseMove(WPARAM buttonState, int x, int y)
 {
 	// Add any custom code here...
+	if ((buttonState & 0x0001 && x > prevMousePos.x)) 
+	{
+		cam.Rotate((float)x*0.00001f, 0.0f);
+		
+	}
+	if ((buttonState & 0x0001 && x < prevMousePos.x))
+	{
+		cam.Rotate((float)x*-0.00001f, 0.0f);
+		
+	}
+	if ((buttonState & 0x0001 && y > prevMousePos.y))
+	{
+		cam.Rotate(0.0f, (float)y*0.00001f);
+		
+	}
+	if ((buttonState & 0x0001 && y < prevMousePos.y))
+	{
+		cam.Rotate(0.0f, (float)y*-0.00001f);
+	}
+	
 
 	// Save the previous mouse position, so we have it for the future
 	prevMousePos.x = x;

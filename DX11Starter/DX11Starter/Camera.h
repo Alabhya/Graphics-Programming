@@ -16,6 +16,8 @@ public:
 	float camRotX = 0.0f;
 	float camRotY = 0.0f;
 	float speed = 10.0f;
+	int width = 1280;
+	int height = 720;
 	Camera();
 	~Camera();
 	const XMMATRIX Update();
@@ -25,4 +27,6 @@ public:
 	void MoveRight(float deltaTime);
 	void MoveUp(float deltaTime);
 	void MoveDown(float deltaTime);
+	void Rotate(float x, float y);
+	const XMMATRIX Projection();
 };

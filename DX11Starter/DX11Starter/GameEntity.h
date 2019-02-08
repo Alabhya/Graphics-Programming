@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include "Vertex.h"
 #include "Mesh.h"
+#include "Material.h"
 
 // For the DirectX Math library
 using namespace DirectX;
@@ -27,3 +28,4 @@ public:
 	~GameEntity();
 };
 
+void PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix, XMFLOAT4X4 worldMatrix, Material* &mat);
