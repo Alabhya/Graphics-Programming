@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "Vertex.h"
-#include "Mesh.h"
+
 
 // For the DirectX Math library
 using namespace DirectX;
@@ -26,6 +26,7 @@ Game::Game(HINSTANCE hInstance)
 	indexBuffer = 0;
 	vertexShader = 0;
 	pixelShader = 0;
+	
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// Do we want a console window?  Probably only in debug mode
@@ -112,7 +113,7 @@ void Game::CreateMatrices()
 	XMMATRIX W = XMMatrixIdentity();
 	XMStoreFloat4x4(&worldMatrix, XMMatrixTranspose(W)); // Transpose for HLSL!
 
-	// Create the View matrix
+	/*// Create the View matrix
 	// - In an actual game, recreate this matrix every time the camera 
 	//    moves (potentially every frame)
 	// - We're using the LOOK TO function, which takes the position of the
@@ -125,8 +126,8 @@ void Game::CreateMatrices()
 	XMMATRIX V = XMMatrixLookToLH(
 		pos,     // The position of the "camera"
 		dir,     // Direction the camera is looking
-		up);     // "Up" direction in 3D space (prevents roll)
-	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V)); // Transpose for HLSL!
+		up);     // "Up" direction in 3D space (prevents roll)*/
+	 // Transpose for HLSL!
 
 	// Create the Projection matrix
 	// - This should match the window's aspect ratio, and also update anytime
@@ -203,9 +204,6 @@ void Game::CreateBasicGeometry()
 	GameEntity4 = new GameEntity(Mesh3);
 	GameEntity5 = new GameEntity(Mesh3);
 
-
-
-
 }
 
 
@@ -235,6 +233,31 @@ void Game::Update(float deltaTime, float totalTime)
 	// Quit if the escape key is pressed
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
+	if (GetAsyncKeyState('W'))
+	{
+		cam.MoveForward(deltaTime);
+		cam.Update();
+	}
+	if (GetAsyncKeyState('S'))
+	{
+		cam.MoveBackward(deltaTime);
+	}
+	if (GetAsyncKeyState('A'))
+	{
+		cam.MoveLeft(deltaTime);
+	}
+	if (GetAsyncKeyState('D'))
+	{
+		cam.MoveRight(deltaTime);
+	}
+	if (GetAsyncKeyState('Q'))
+	{
+		cam.MoveUp(deltaTime);
+	}
+	if (GetAsyncKeyState('E'))
+	{
+		cam.MoveDown(deltaTime);
+	}
 	GameEntity1->SetRotationZ(totalTime);
 	GameEntity2->SetTranslation(0.0f, (sin(5.0f * totalTime) + 2) / 5.0f, 0.0f);
 	GameEntity3->SetScale((sin(5.0f * totalTime) + 2)/5.0f, (sin(5.0f * totalTime) +2)/5.0f ,(sin(5.0f * totalTime)+2)/5.0f);
@@ -263,7 +286,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
-
+	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(cam.Update()));
 	//Draw Calls for Individual Objects
 	vertexShader->SetMatrix4x4("world", GameEntity1->GetWorldMatrix());
 	vertexShader->SetMatrix4x4("view", viewMatrix);
