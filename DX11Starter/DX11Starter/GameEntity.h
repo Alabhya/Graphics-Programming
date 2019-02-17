@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include "Vertex.h"
 #include "Mesh.h"
+#include "Material.h"
 
 // For the DirectX Math library
 using namespace DirectX;
@@ -23,6 +24,8 @@ public:
 	void SetRotationY(const float y);
 	void SetRotationZ(const float z);
 	const XMFLOAT4X4 GetWorldMatrix();	
+	void PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix, XMFLOAT4X4 worldMatrix, Material* &mat);
+
 	GameEntity(Mesh *bMesh);
 	~GameEntity();
 };
