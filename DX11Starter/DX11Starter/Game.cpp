@@ -55,11 +55,13 @@ Game::~Game()
 	delete Mesh1;
 	delete Mesh2;
 	delete Mesh3;
+	delete Mesh4;
 	delete GameEntity1;
 	delete GameEntity2;
 	delete GameEntity3;
 	delete GameEntity4;
 	delete GameEntity5;	
+	delete GameEntity6;
 }
 
 // --------------------------------------------------------
@@ -79,6 +81,16 @@ void Game::Init()
 	// geometric primitives (points, lines or triangles) we want to draw.  
 	// Essentially: "What kind of shape should the GPU draw with our data?"
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	DL1 =
+	{ XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f),
+	  XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
+	  XMFLOAT3(1.0f, -1.0f, 0.0f)};
+	DL2 =
+	{ XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f),
+	  XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
+	  XMFLOAT3(1.0f, 1.0f, 0.0f) };
+
 }
 
 // --------------------------------------------------------
@@ -157,10 +169,10 @@ void Game::CreateBasicGeometry()
 	//    over to a DirectX-controlled data structure (the vertex buffer)
 	Vertex vertices1[] =
 	{
-		{ XMFLOAT3(+2.5f, +1.0f, +0.0f), red },
-		{ XMFLOAT3(+3.5f, +0.0f, +0.0f), red },
-		{ XMFLOAT3(+2.5f, -1.0f, +0.0f), red},
-	    { XMFLOAT3(+1.5f, +0.0f, +0.0f), red},
+		{ XMFLOAT3(+2.5f, +1.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+		{ XMFLOAT3(+3.5f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+		{ XMFLOAT3(+2.5f, -1.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+	    { XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
 	};
 
 	// Set up the indices, which tell us which vertices to use and in which order
@@ -173,22 +185,22 @@ void Game::CreateBasicGeometry()
 
 	Vertex vertices2[] = 
 	{
-			{ XMFLOAT3(-1.0f, +0.0f, +0.0f), blue },
-			{ XMFLOAT3(+0.0f, +1.7f, +0.0f), blue },
-			{ XMFLOAT3(+1.0f, +0.0f, +0.0f), blue},
-			{ XMFLOAT3(-1.0f, +1.1f, +0.0f), blue},
-	        { XMFLOAT3(+1.0f, +1.1f, +0.0f), blue },
-	        { XMFLOAT3(+0.0f, -0.6f, +0.0f), blue }
+			{ XMFLOAT3(-1.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+			{ XMFLOAT3(+0.0f, +1.7f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+			{ XMFLOAT3(+1.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+			{ XMFLOAT3(-1.0f, +1.1f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+	        { XMFLOAT3(+1.0f, +1.1f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+	        { XMFLOAT3(+0.0f, -0.6f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)}
 	};
 
 	int indices2[] = { 0, 1, 2, 3, 4, 5 };
 
 	Vertex vertices3[] =
 	{
-		{ XMFLOAT3(-2.5f, +1.0f, +0.0f), green },
-		{ XMFLOAT3(-1.5f, +0.0f, +0.0f), green },
-		{ XMFLOAT3(-2.5f, -1.0f, +0.0f), green},
-		{ XMFLOAT3(-3.5f, +0.0f, +0.0f), green},
+		{ XMFLOAT3(-2.5f, +1.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+		{ XMFLOAT3(-1.5f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+		{ XMFLOAT3(-2.5f, -1.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
+		{ XMFLOAT3(-3.5f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, -1.0f), XMFLOAT2(+0.0f,+0.0f)},
 	};
 
 	int indices3[] = { 0, 1, 2, 2, 3, 0 };
@@ -196,13 +208,14 @@ void Game::CreateBasicGeometry()
 	Mesh1 = new Mesh (vertices1,4,indices1,6,device);
 	Mesh2 = new Mesh (vertices2,6,indices2,6,device);
 	Mesh3 = new Mesh (vertices3,4,indices3,6,device);
-	
+	Mesh4 = new Mesh("Assets/Models/sphere.obj", device);
 
 	GameEntity1 = new GameEntity(Mesh1);
 	GameEntity2 = new GameEntity(Mesh1);
 	GameEntity3 = new GameEntity(Mesh2);
 	GameEntity4 = new GameEntity(Mesh3);
 	GameEntity5 = new GameEntity(Mesh3);
+	GameEntity6 = new GameEntity(Mesh4);
 
 }
 
@@ -267,6 +280,9 @@ void Game::Update(float deltaTime, float totalTime)
 	GameEntity2->SetScale(0.7f,0.7f,0.7f);
 	GameEntity4->SetScale(0.7f, 0.7f, 0.7f);
 	GameEntity5->SetScale(0.7f, 0.7f, 0.7f);
+	GameEntity6->SetTranslation(0.0f,-1.0f,0.0f);
+	GameEntity6->SetRotationY(deltaTime);
+
 }
 
 // --------------------------------------------------------
@@ -295,7 +311,7 @@ void Game::Draw(float deltaTime, float totalTime)
 	vertexShader->CopyAllBufferData();
 	vertexShader->SetShader();
 	pixelShader->SetShader();
-	/*GameEntity1->PrepareMaterial(viewMatrix, projectionMatrix, worldMatrix, mat);*/
+	//GameEntity1->PrepareMaterial(viewMatrix, projectionMatrix, worldMatrix, mat);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
@@ -389,6 +405,26 @@ void Game::Draw(float deltaTime, float totalTime)
 	vertexBufferGame = Mesh3->GetVertexBuffer();
 	indexBufferGame = Mesh3->GetIndexBuffer();
 	tempIndex = Mesh3->GetIndexCount();
+	context->IASetVertexBuffers(0, 1, &vertexBufferGame, &stride, &offset);
+	context->IASetIndexBuffer(indexBufferGame, DXGI_FORMAT_R32_UINT, 0);
+	context->DrawIndexed(
+		tempIndex,
+		0,
+		0);
+
+	vertexShader->SetMatrix4x4("world", GameEntity6->GetWorldMatrix());
+	vertexShader->SetMatrix4x4("view", viewMatrix);
+	vertexShader->SetMatrix4x4("projection", projectionMatrix);
+	vertexShader->CopyAllBufferData();
+	vertexShader->SetShader();
+	pixelShader->SetData("DL1", &DL1, sizeof(DirectionalLight));
+	pixelShader->SetData("DL2", &DL2, sizeof(DirectionalLight));
+	pixelShader->CopyAllBufferData();
+	pixelShader->SetShader();
+	
+	vertexBufferGame = Mesh4->GetVertexBuffer();
+	indexBufferGame = Mesh4->GetIndexBuffer();
+	tempIndex = Mesh4->GetIndexCount();
 	context->IASetVertexBuffers(0, 1, &vertexBufferGame, &stride, &offset);
 	context->IASetIndexBuffer(indexBufferGame, DXGI_FORMAT_R32_UINT, 0);
 	context->DrawIndexed(

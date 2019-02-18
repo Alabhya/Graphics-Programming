@@ -7,6 +7,7 @@
 #include "GameEntity.h"
 #include "Camera.h"
 #include "Material.h"
+#include "Lights.h"
 
 class Game 
 	: public DXCore
@@ -55,12 +56,16 @@ private:
 	Mesh *Mesh1;
 	Mesh *Mesh2;
 	Mesh *Mesh3;
+	Mesh *Mesh4;
 	GameEntity *GameEntity1;
 	GameEntity *GameEntity2;
 	GameEntity *GameEntity3;
 	GameEntity *GameEntity4;
 	GameEntity *GameEntity5;
+	GameEntity *GameEntity6;
 	Camera cam;
 	Material *mat;
+	DirectionalLight DL1;
+	DirectionalLight DL2;
 };
 

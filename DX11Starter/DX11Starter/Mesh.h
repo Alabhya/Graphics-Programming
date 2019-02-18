@@ -7,21 +7,17 @@ using namespace DirectX;
 
 class Mesh
 {
-public:
-	Vertex *vertexArray;
-	int vertexArrayCount;
-	int *indexArray;
-	int indexArrayCount;
-	Mesh(Vertex *vertexArray, int const &vertexArrayCount, int *indexArray, int const &indexArrayCount, ID3D11Device* &device);
-	~Mesh();
 private:
-	int indexCount;
-public:
+	int indexArrayCount;
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
+public:
+	Mesh(Vertex *vertexArray, int  vertexArrayCount, int *indexArray, int  indexArrayCount, ID3D11Device* device);
+	Mesh(const char* objFile, ID3D11Device* device);
+	~Mesh();
+	void CreateBuffer(Vertex * vertexArray, int vertexArrayCount, int * indexArray, int indexArrayCount, ID3D11Device * device);
 	ID3D11Buffer* GetVertexBuffer();
-	ID3D11Buffer* GetIndexBuffer();
-	ID3D11Device*  device;
+	ID3D11Buffer* GetIndexBuffer();	
 	int GetIndexCount();
 };
 
