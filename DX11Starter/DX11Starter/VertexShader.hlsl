@@ -26,8 +26,9 @@ struct VertexShaderInput
 	//  v    v                v
 	float3 position		: POSITION;     // XYZ position
 	//float4 color		: COLOR;        // RGBA color
-	float3 normal       : NORMAL;       // Normal
 	float2 uv           : TEXCOORD;
+	float3 normal       : NORMAL;       // Normal
+	
 };
 
 // Struct representing the data we're sending down the pipeline
@@ -43,6 +44,7 @@ struct VertexToPixel
 	//  |    |                |
 	//  v    v                v
 	float4 position		: SV_POSITION;	// XYZW position (System Value Position)
+	float2 uv			: TEXCOORD;
 	float3 normal		: NORMAL;
 	float3 worldPos		: POSITION;
 	//float4 color		: COLOR;        // RGBA color
@@ -89,6 +91,9 @@ VertexToPixel main( VertexShaderInput input )
 
 	// Remember to normalize the normal since it's probably also scaled
 	output.normal = normalize(output.normal);
+
+	// Pass through the uv
+	output.uv = input.uv;
 
 	// Whatever we return will make its way through the pipeline to the
 	// next programmable stage we're using (the pixel shader for now)

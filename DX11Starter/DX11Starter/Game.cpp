@@ -1,8 +1,7 @@
 #include "Game.h"
 #include "Vertex.h"
+#include "WICTextureLoader.h" 
 
-
-// For the DirectX Math library
 using namespace DirectX;
 
 // --------------------------------------------------------
@@ -47,6 +46,10 @@ Game::~Game()
 	// we've made in the Game class
 	if (vertexBuffer) { vertexBuffer->Release(); }
 	if (indexBuffer) { indexBuffer->Release(); }
+	pebColorSRV->Release();
+	pebBumpSRV->Release();
+	pebNormalSRV->Release();
+	sampler->Release();
 
 	// Delete our simple shader objects, which
 	// will clean up their own internal DirectX stuff
@@ -62,6 +65,7 @@ Game::~Game()
 	delete GameEntity4;
 	delete GameEntity5;	
 	delete GameEntity6;
+	delete mat1;
 }
 
 // --------------------------------------------------------
@@ -76,6 +80,27 @@ void Game::Init()
 	LoadShaders();
 	CreateMatrices();
 	CreateBasicGeometry();
+
+	CreateWICTextureFromFile(
+		device,					// The Direct3D device for resource creation
+		context,				// Rendering context (this will auto-generate mip maps!!!)
+		L"Assets/Textures/pebbles_color_2048.jpg",	// Path to the file ("L" means wide characters)
+		0,						// Texture ref?  No thanks!  (0 means we don't want an extra ref)
+		&pebColorSRV);				// Actual SRV for use with shaders
+
+	CreateWICTextureFromFile(device, context, L"Assets/Textures/pebbles_bump_2048.jpg", 0, &pebBumpSRV);
+	CreateWICTextureFromFile(device, context, L"Assets/Textures/pebbles_normal_2048.jpg", 0, &pebNormalSRV);
+
+	// Create a sampler state for sampling options
+	D3D11_SAMPLER_DESC sampDesc = {}; // " = {}" fills the whole struct with zeros!
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;			// This will ensure mip maps are used!
+	sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;		//D3D11_FILTER_MIN_MAG_MIP_LINEAR;	// Tri-linear filtering
+	sampDesc.MaxAnisotropy = 16; // Must be set for anisotropic filtering
+
+	device->CreateSamplerState(&sampDesc, &sampler);
 
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
@@ -106,6 +131,8 @@ void Game::LoadShaders()
 
 	pixelShader = new SimplePixelShader(device, context);
 	pixelShader->LoadShaderFile(L"PixelShader.cso");
+
+	mat1 = new Material(vertexShader,pixelShader, pebColorSRV, sampler);
 }
 
 
@@ -304,14 +331,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		0);
 	XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(cam.Update()));
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(cam.Projection()));
-	//Draw Calls for Individual Objects
-	vertexShader->SetMatrix4x4("world", GameEntity1->GetWorldMatrix());
-	vertexShader->SetMatrix4x4("view", viewMatrix);
-	vertexShader->SetMatrix4x4("projection", projectionMatrix);
-	vertexShader->CopyAllBufferData();
-	vertexShader->SetShader();
-	pixelShader->SetShader();
-	//GameEntity1->PrepareMaterial(viewMatrix, projectionMatrix, worldMatrix, mat);
+	GameEntity1->PrepareMaterial(viewMatrix, projectionMatrix, GameEntity1->GetWorldMatrix(), mat1);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
@@ -327,12 +347,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		0,     
 		0);    
 
-	vertexShader->SetMatrix4x4("world", GameEntity2->GetWorldMatrix());
-	vertexShader->SetMatrix4x4("view", viewMatrix);
-	vertexShader->SetMatrix4x4("projection", projectionMatrix);
-	vertexShader->CopyAllBufferData();
-	vertexShader->SetShader();
-	pixelShader->SetShader();
+	GameEntity2->PrepareMaterial(viewMatrix, projectionMatrix, GameEntity2->GetWorldMatrix(), mat1);
 
 	vertexBufferGame = Mesh1->GetVertexBuffer();
 	indexBufferGame = Mesh1->GetIndexBuffer();
@@ -344,12 +359,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		0,
 		0);
 
-	vertexShader->SetMatrix4x4("world", GameEntity3->GetWorldMatrix());
-	vertexShader->SetMatrix4x4("view", viewMatrix);
-	vertexShader->SetMatrix4x4("projection", projectionMatrix);
-	vertexShader->CopyAllBufferData();
-	vertexShader->SetShader();
-	pixelShader->SetShader();
+	GameEntity3->PrepareMaterial(viewMatrix, projectionMatrix, GameEntity3->GetWorldMatrix(), mat1);
 
 	vertexBufferGame = Mesh2->GetVertexBuffer();
 	indexBufferGame = Mesh2->GetIndexBuffer();
@@ -361,12 +371,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		0,
 		0);
 
-	vertexShader->SetMatrix4x4("world", GameEntity3->GetWorldMatrix());
-	vertexShader->SetMatrix4x4("view", viewMatrix);
-	vertexShader->SetMatrix4x4("projection", projectionMatrix);
-	vertexShader->CopyAllBufferData();
-	vertexShader->SetShader();
-	pixelShader->SetShader();
+	GameEntity3->PrepareMaterial(viewMatrix, projectionMatrix, GameEntity3->GetWorldMatrix(), mat1);
 
 	vertexBufferGame = Mesh2->GetVertexBuffer();
 	indexBufferGame = Mesh2->GetIndexBuffer();
@@ -378,12 +383,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		0,
 		0);
 
-	vertexShader->SetMatrix4x4("world", GameEntity4->GetWorldMatrix());
-	vertexShader->SetMatrix4x4("view", viewMatrix);
-	vertexShader->SetMatrix4x4("projection", projectionMatrix);
-	vertexShader->CopyAllBufferData();
-	vertexShader->SetShader();
-	pixelShader->SetShader();
+	GameEntity4->PrepareMaterial(viewMatrix, projectionMatrix, GameEntity4->GetWorldMatrix(), mat1);
 
 	vertexBufferGame = Mesh3->GetVertexBuffer();
 	indexBufferGame = Mesh3->GetIndexBuffer();
@@ -395,12 +395,7 @@ void Game::Draw(float deltaTime, float totalTime)
 		0,
 		0);
 
-	vertexShader->SetMatrix4x4("world", GameEntity5->GetWorldMatrix());
-	vertexShader->SetMatrix4x4("view", viewMatrix);
-	vertexShader->SetMatrix4x4("projection", projectionMatrix);
-	vertexShader->CopyAllBufferData();
-	vertexShader->SetShader();
-	pixelShader->SetShader();
+	GameEntity5->PrepareMaterial(viewMatrix, projectionMatrix, GameEntity5->GetWorldMatrix(), mat1);
 
 	vertexBufferGame = Mesh3->GetVertexBuffer();
 	indexBufferGame = Mesh3->GetIndexBuffer();
@@ -412,16 +407,18 @@ void Game::Draw(float deltaTime, float totalTime)
 		0,
 		0);
 
-	vertexShader->SetMatrix4x4("world", GameEntity6->GetWorldMatrix());
-	vertexShader->SetMatrix4x4("view", viewMatrix);
-	vertexShader->SetMatrix4x4("projection", projectionMatrix);
-	vertexShader->CopyAllBufferData();
-	vertexShader->SetShader();
+	GameEntity6->PrepareMaterial(viewMatrix, projectionMatrix, GameEntity6->GetWorldMatrix(), mat1);
 	pixelShader->SetData("DL1", &DL1, sizeof(DirectionalLight));
 	pixelShader->SetData("DL2", &DL2, sizeof(DirectionalLight));
 	pixelShader->CopyAllBufferData();
 	pixelShader->SetShader();
-	
+
+	// Set texture-related resources
+	pixelShader->SetSamplerState("BasicSampler", sampler);
+	pixelShader->SetShaderResourceView("DiffuseTexture", pebColorSRV);
+	pixelShader->SetShaderResourceView("SpecularMap", pebBumpSRV);
+	pixelShader->SetShaderResourceView("NormalMap", pebNormalSRV);
+
 	vertexBufferGame = Mesh4->GetVertexBuffer();
 	indexBufferGame = Mesh4->GetIndexBuffer();
 	tempIndex = Mesh4->GetIndexCount();

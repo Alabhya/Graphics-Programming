@@ -44,6 +44,15 @@ private:
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
 
+	// Texture related resources
+	ID3D11ShaderResourceView* pebColorSRV;
+	ID3D11ShaderResourceView* pebBumpSRV;
+	ID3D11ShaderResourceView* pebNormalSRV;
+
+	ID3D11SamplerState *sampler;
+
+
+
 	// The matrices to go from model space to screen space
 	DirectX::XMFLOAT4X4 worldMatrix;
 	DirectX::XMFLOAT4X4 viewMatrix;
@@ -53,6 +62,8 @@ private:
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 
+
+	//Objects created in-game
 	Mesh *Mesh1;
 	Mesh *Mesh2;
 	Mesh *Mesh3;
@@ -64,7 +75,7 @@ private:
 	GameEntity *GameEntity5;
 	GameEntity *GameEntity6;
 	Camera cam;
-	Material *mat;
+	Material *mat1;
 	DirectionalLight DL1;
 	DirectionalLight DL2;
 };

@@ -2,6 +2,16 @@
 
 
 
+ID3D11ShaderResourceView *& Material::GetTexture()
+{
+	return texture;
+}
+
+ID3D11SamplerState *& Material::GetSampler()
+{
+	return sampler;
+}
+
 SimpleVertexShader *& Material::GetVertexShader()
 {
 	// TODO: insert return statement here
@@ -14,14 +24,16 @@ SimplePixelShader *& Material::GetPixelShader()
 	return pixelShader;
 }
 
-Material::Material(SimpleVertexShader*& vertexShader, SimplePixelShader*& pixelShader)
+Material::Material(SimpleVertexShader*& vertexShader, SimplePixelShader*& pixelShader, ID3D11ShaderResourceView*& texture, ID3D11SamplerState*& sampler)
  {
-	 vertexShader = 0;
-	 pixelShader = 0;
+	 this->vertexShader = vertexShader;
+	 this->pixelShader = pixelShader;
+	 this->texture = texture;
+	 this->sampler = sampler;
 }
 
- Material::~Material()
+Material::~Material()
 {
-	delete vertexShader;
-	delete pixelShader;
 }
+
+
