@@ -13,10 +13,7 @@ public:
 	
 	SimpleVertexShader* & GetVertexShader();
 	SimplePixelShader*  & GetPixelShader();
-
-	void LoadShaders(ID3D11Device *& device, ID3D11DeviceContext *& context);
-
-	Material();	
+	Material(SimpleVertexShader*& vertexShader, SimplePixelShader*& pixelShader);
 	~Material();
 };
 

@@ -45,14 +45,14 @@ const XMFLOAT4X4 GameEntity::GetWorldMatrix()
 	return worldMat;
 }
 
-void GameEntity::PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix, XMFLOAT4X4 worldMatrix, Material *& mat)
+void GameEntity::PrepareMaterial(XMFLOAT4X4 viewMatrix, XMFLOAT4X4 projectionMatrix, XMFLOAT4X4 worldMatrix, Material*& mat)
 {
 	mat->GetVertexShader()->SetMatrix4x4("world", worldMatrix);
 	mat->GetVertexShader()->SetMatrix4x4("view", viewMatrix);
 	mat->GetVertexShader()->SetMatrix4x4("projection", projectionMatrix);
 	mat->GetVertexShader()->CopyAllBufferData();
 	mat->GetVertexShader()->SetShader();
-	mat->GetVertexShader()->SetShader();
+	mat->GetPixelShader()->SetShader();
 }
 
 GameEntity::GameEntity(Mesh *bMesh)
