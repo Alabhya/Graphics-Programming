@@ -108,12 +108,12 @@ void Game::Init()
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	DL1 =
-	{ XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f),
-	  XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
+	{ XMFLOAT4(0.1f, 0.2f, 0.3f, 1.0f),
+	  XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 	  XMFLOAT3(1.0f, -1.0f, 0.0f)};
 	DL2 =
-	{ XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f),
-	  XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
+	{ XMFLOAT4(0.1f, 0.2f, 0.3f, 1.0f),
+	  XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 	  XMFLOAT3(1.0f, 1.0f, 0.0f) };
 
 }

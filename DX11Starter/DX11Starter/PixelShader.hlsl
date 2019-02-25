@@ -43,8 +43,8 @@ float4 main(VertexToPixel input) : SV_TARGET
 
 	// Handle texture sampling here
 	float4 surfaceColor = DiffuseTexture.Sample(BasicSampler, input.uv);	
-	float  specAdjust = SpecularMap.Sample(BasicSampler, input.uv).r;
+	float  specAdjust = SpecularMap.Sample(BasicSampler, input.uv).rgb;
 
 // Final pixel color ////////////////////////////*/
-return float4(((DL1.AmbientColor + (DL1.Diffusecolor * dirNdotL1)) + (DL2.AmbientColor + (DL2.Diffusecolor * dirNdotL2)))*surfaceColor);
+return float4(((DL1.AmbientColor + (DL1.Diffusecolor * dirNdotL1)) + (DL2.AmbientColor + (DL2.Diffusecolor * dirNdotL2)))*surfaceColor*specAdjust);
 }
